@@ -1,38 +1,31 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import session from "express-session";
 import { Users } from "../databases/db.mjs"; // si tu exportes ton model depuis db.mjs
 
 const router = express.Router();
-
-// Middleware de session (tu peux aussi le mettre dans app.mjs)
-router.use(
-  session({
-    secret: "super_secret_key", // à remplacer par une vraie clé
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // mettre true en prod avec HTTPS
-  })
-);
 
 // Page de connexion
 router.get("/login", (req, res) => {
   res.render("login", { error: null });
 });
 
-// Traitement du login
+// Traitement du login (accept "identifier" = email ou username)
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const identifier = req.body.identifier || req.body.email;
+  const password = req.body.password;
 
   try {
-    const user = await Users.findOne({ where: { email } });
-    if (!user) return res.render("login", { error: "Utilisateur introuvable" });
+    // Essayer email d'abord, puis username
+    let found = await Users.findOne({ where: { email: identifier } });
+    if (!found) found = await Users.findOne({ where: { username: identifier } });
 
-    const valid = await bcrypt.compare(password, user.password);
+    if (!found) return res.render("login", { error: "Utilisateur introuvable" });
+
+    const valid = await bcrypt.compare(password, found.password);
     if (!valid) return res.render("login", { error: "Mot de passe incorrect" });
 
-    req.session.user = user;
-    res.redirect("/devoirs");
+    req.session.user = { id: found.id, username: found.username, email: found.email };
+    res.redirect("/events");
   } catch (error) {
     console.error(error);
     res.render("login", { error: "Erreur interne" });

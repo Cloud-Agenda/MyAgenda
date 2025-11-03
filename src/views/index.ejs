@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+<section class="hero card">
+  <div class="hero-left">
+    <h2>Votre agenda simple et rapide</h2>
+    <p class="kicker">Créez des événements, consultez le calendrier et partagez vos rendez‑vous. Commencez en ajoutant votre premier événement ou explorez le calendrier.</p>
+    <div class="hero-cta">
+      <a class="button primary" href="/events/new">Nouvel événement</a>
+      <a class="button outline" href="/agenda">Voir le calendrier</a>
+      <a class="button secondary" href="/seed">Seed sample data</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <!-- petit aperçu ou illustration (placeholder) -->
+    <div class="hero-card">Prochains éléments • <strong><%= events.length %></strong></div>
+  </div>
+</section>
+
+<section class="list card">
+  <% if (events.length === 0) { %>
+    <div class="empty-state">
+      <h3>Aucun événement pour le moment</h3>
+      <p class="small">Ajoutez votre premier événement pour commencer à organiser votre agenda.</p>
+      <a class="button primary" href="/events/new">Créer un événement</a>
+    </div>
+  <% } else { %>
+    <% function fmtDate(d){ if(!d) return '-'; try { return (new Date(d)).toISOString().slice(0,10); } catch(e){ return '-'; } } %>
+    <table>
+      <thead>
+        <tr><th>Title</th><th>Subject</th><th>Date</th><th>Class</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% events.forEach(function(ev){ %>
+          <tr>
+            <td><a href="/events/<%= ev.id %>"><%= ev.title %></a></td>
+            <td><%= ev.subject || '-' %></td>
+            <td><%= fmtDate(ev.due_date) %></td>
+            <td><%= ev.class || '-' %></td>
+            <td class="actions">
+              <a href="/events/<%= ev.id %>/edit">Edit</a>
+              <a class="button outline" href="/events/<%= ev.id %>/ical">iCal</a>
+              <form action="/events/<%= ev.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Delete this event?');" style="display:inline">
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

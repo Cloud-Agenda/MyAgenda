@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+<section class="calendar">
+  <header class="calendar-head">
+    <h2>
+      <a class="nav" href="/agenda?year=<%= prevYear %>&month=<%= prevMonth %>">&larr;</a>
+      <span class="month-title"><%= monthName.charAt(0).toUpperCase() + monthName.slice(1) %> <%= year %></span>
+      <a class="nav" href="/agenda?year=<%= nextYear %>&month=<%= nextMonth %>">&rarr;</a>
+    </h2>
+    <p><a href="/">Retour à la liste</a> · <a href="/events/new">Nouvel événement</a></p>
+
+    
+    </div>
+
+  </header>
+
+  <table class="calendar-table">
+    <thead>
+      <tr>
+        <th>Dim</th>
+        <th>Lun</th>
+        <th>Mar</th>
+        <th>Mer</th>
+        <th>Jeu</th>
+        <th>Ven</th>
+        <th>Sam</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% weeks.forEach(function(week){ %>
+        <tr>
+          <% week.forEach(function(day){ %>
+            <% if (!day) { %>
+              <td class="empty"></td>
+            <% } else { %>
+              <% const has = eventsByDay[day] && eventsByDay[day].length; %>
+              <td class="day <%= (todayDay === day ? 'today' : '') %> <%= (has ? 'has-event' : '') %>">
+                <div class="day-head">
+                  <div class="day-num"><%= day %></div>
+                  <% if (has) { %>
+                    <span class="badge"><%= eventsByDay[day].length %></span>
+                  <% } %>
+                </div>
+                <div class="day-events">
+                  <% (eventsByDay[day] || []).slice(0,3).forEach(function(ev){ 
+                      let time = '';
+                      try { time = ev.due_date ? (new Date(ev.due_date)).toISOString().slice(11,16) : ''; } catch(e) { time = ''; }
+                  %>
+                    <div class="event"><a href="/events/<%= ev.id %>"><span class="ev-time"><%= time ? time : '' %></span> <%= ev.title %></a></div>
+                  <% }) %>
+                  <% if (has && eventsByDay[day].length > 3) { %>
+                    <div class="more">+<%= eventsByDay[day].length - 3 %> autres</div>
+                  <% } %>
+                </div>
+              </td>
+            <% } %>
+          <% }); %>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,284 @@
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+/* Theme variables */
+:root{
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --primary: #0ea5a4; /* teal */
+  --accent: #065f46;  /* deep green */
+  --danger: #ff5252;
+  --border: #e6e9ef;
+  --shadow: 0 6px 20px rgba(18, 23, 40, 0.06);
+  --radius: 10px;
+  --max-width: 1100px;
+  --gap: 1rem;
+  --glass: rgba(255,255,255,0.6);
+}
+
+/* Reset & base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: #0f172a;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+  font-size:16px;
+}
+
+/* Layout */
+header {
+  background: linear-gradient(90deg,var(--primary), #34d399);
+  color: white;
+  padding: 1rem 1.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow: 0 4px 18px rgba(14,165,164,0.08);
+}
+header h1 { margin:0; font-size:1.15rem; font-weight:700; letter-spacing:0.2px }
+header a { color: inherit; text-decoration: none }
+main { padding: 1.25rem; max-width: var(--max-width); margin: 0 auto; }
+
+/* Top nav links */
+header nav { display:flex; gap:0.75rem; align-items:center }
+header nav a {
+  color: rgba(255,255,255,0.95);
+  text-decoration:none;
+  padding:0.45rem 0.7rem;
+  border-radius:8px;
+  font-weight:600;
+  transition: all .15s ease;
+}
+header nav a:hover { background: rgba(255,255,255,0.08); transform:translateY(-1px) }
+
+/* Cards / tables */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  border: 1px solid var(--border);
+}
+table { width:100%; border-collapse: collapse; background: var(--card); border-radius:8px; overflow:hidden; border:1px solid var(--border) }
+th, td { padding: 0.75rem 0.9rem; text-align:left; border-bottom:1px solid #f1f3f7 }
+th { background: linear-gradient(180deg,#fbfdff,#f6f8ff); font-weight:700; color: #334155; font-size:0.95rem }
+tbody tr:hover { background: linear-gradient(90deg, rgba(63,81,181,0.02), transparent) }
+
+/* Forms */
+.form label { display:block; margin-bottom:0.75rem; color: #111827; font-weight:600; font-size:0.95rem }
+input, textarea, select {
+  width:100%;
+  padding:0.6rem 0.7rem;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background: linear-gradient(180deg,#fff,#fbfdff);
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease, transform .06s ease;
+  font-size:0.95rem;
+  color: #0f172a;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(63,81,181,0.9);
+  box-shadow: 0 6px 18px rgba(63,81,181,0.06);
+  transform: translateY(-1px);
+}
+textarea { min-height:140px; resize:vertical }
+
+/* Buttons refinements */
+button, .button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.45rem;
+  cursor:pointer;
+  user-select:none;
+  border-radius:8px;
+  padding:0.5rem 0.85rem;
+  font-weight:700;
+  border: none;
+  transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+  font-size:0.95rem;
+  padding:0.6rem 1rem;
+  border-radius:10px;
+  letter-spacing:0.2px;
+}
+button:hover, .button:hover { transform: translateY(-2px) }
+button:active, .button:active { transform: translateY(0) }
+.button.primary {
+  background: linear-gradient(180deg,var(--primary), #34c3b4);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(14,165,164,0.16);
+  transform: translateZ(0);
+}
+.button.primary:hover {
+  box-shadow: 0 14px 36px rgba(14,165,164,0.2);
+  opacity: 0.98;
+}
+
+/* smaller inline CTA (for inline links like "Create one") */
+.button.small {
+  padding:0.38rem 0.7rem;
+  font-size:0.9rem;
+  border-radius:8px;
+}
+
+/* Muted button variant for subtle cancel links */
+.button.muted {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(16,24,40,0.04);
+  padding:0.4rem 0.6rem;
+}
+
+/* Form / new event polish */
+.form {
+  max-width: 720px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(250,250,252,0.95));
+  padding: 1.15rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(18,23,40,0.04);
+}
+.form h2 {
+  margin-top:0;
+  margin-bottom:0.75rem;
+  font-size:1.25rem;
+  font-weight:800;
+  color:#0f172a;
+}
+
+/* Larger primary button on form actions */
+.form .form-actions .button.primary, .form .form-actions button.primary {
+  padding:0.6rem 1.1rem;
+  font-size:1rem;
+  border-radius:10px;
+}
+
+/* Distinct hover colors for prev / next month links */
+.months-block.prev a:hover {
+  background: rgba(255,82,82,0.08);
+  color: var(--danger);
+  border-color: rgba(255,82,82,0.12);
+  box-shadow: 0 6px 18px rgba(255,82,82,0.05);
+}
+.months-block.next a:hover {
+  background: rgba(63,81,181,0.08);
+  color: var(--primary);
+  border-color: rgba(63,81,181,0.12);
+  box-shadow: 0 6px 18px rgba(63,81,181,0.06);
+}
+
+/* Show / event page */
+.show.card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: linear-gradient(180deg,#fff,#fbfdff);
+}
+.show h2 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+.show .meta {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap:wrap;
+  margin-bottom: 0.8rem;
+}
+.show .meta .item {
+  background: rgba(0,0,0,0.03);
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+.show .desc { margin-top: 0.8rem; color:#111827; line-height:1.5 }
+
+/* Actions on show */
+.show .actions {
+  display:flex;
+  gap:0.6rem;
+  margin-top:1rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.show .actions form { display:inline-block; margin:0 }
+
+/* Button danger variant */
+.button.danger {
+  background: linear-gradient(180deg,var(--danger), #ff6b6b);
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(255,82,82,0.12);
+  border: none;
+}
+.button.danger:hover {
+  box-shadow: 0 14px 36px rgba(255,82,82,0.16);
+  transform: translateY(-2px);
+}
+
+/* Utility */
+.actions { width: 190px; display:flex; gap:0.5rem; align-items:center }
+.actions a { color:var(--primary); text-decoration:none; font-weight:600 }
+.small { font-size:0.875rem; color:var(--muted) }
+.kicker { font-size:0.9rem; color:var(--muted) }
+
+/* Header layout tweaks */
+.header-left { display:flex; flex-direction:column; gap:0.15rem }
+.header-right { display:flex; align-items:center; gap:0.75rem }
+.header .kicker { color: rgba(255,255,255,0.9); font-weight:500; font-size:0.92rem; opacity:0.95 }
+
+/* Hero section */
+.hero { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:1.2rem; margin-bottom:1rem; overflow:hidden }
+.hero-left { max-width: 72% }
+.hero-left h2 { margin:0 0 0.35rem 0; font-size:1.45rem; font-weight:800; color:#0f172a }
+.hero-left .kicker { margin:0 0 0.8rem 0; color:var(--muted); font-size:1rem }
+.hero-cta { display:flex; gap:0.6rem }
+.hero-right { display:flex; align-items:center; justify-content:flex-end }
+.hero-card { background: linear-gradient(180deg,#fff,#fbfdff); padding:0.6rem 0.9rem; border-radius:10px; border:1px solid var(--border); font-weight:700; color:var(--primary) }
+
+/* Empty state inside list */
+.empty-state { text-align:center; padding:2rem 1rem }
+.empty-state h3 { margin:0 0 0.5rem 0; font-size:1.25rem }
+.empty-state p { margin:0 0 1rem 0; color:var(--muted) }
+
+/* Improve list card spacing */
+.list.card { padding: 0.5rem }
+
+/* small responsive adjustments */
+@media (max-width: 700px) {
+  .hero { flex-direction:column; align-items:flex-start }
+  .hero-left { max-width:100% }
+  .header-right nav { display:flex; gap:0.5rem }
+}
+@media (max-width: 900px) {
+  main { padding: 1rem }
+  .calendar-table th, .calendar-table td { padding:0.45rem; height:90px; font-size:0.92rem }
+  .calendar-head { flex-direction:column; gap:0.5rem; align-items:flex-start }
+  .calendar { padding:0 0.5rem }
+  .actions { width:auto; flex-direction:column; gap:0.35rem }
+}
+@media (max-width: 480px) {
+  header { padding:0.7rem 0.9rem }
+  header h1 { font-size:1rem }
+  .calendar-table th, .calendar-table td { height:82px; font-size:0.87rem }
+  input, textarea { font-size:0.92rem }
+}
+
+/* Accessibility helpers */
+.sr-only { position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
+
+/* End of file */

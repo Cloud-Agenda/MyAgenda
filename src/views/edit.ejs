@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<section class="form card">
+  <h2>Edit homework</h2>
+  <form action="/events/<%= event.id %>?_method=PUT" method="POST">
+    <label>Title<br><input name="title" required value="<%= event.title %>"></label>
+    <label>Subject<br><input name="subject" value="<%= event.subject || '' %>"></label>
+    <% function fmtDateOnly(d){ if(!d) return ''; try { return (new Date(d)).toISOString().slice(0,10); } catch(e){ return ''; } } %>
+    <% function fmtTimeOnly(d){ if(!d) return ''; try { return (new Date(d)).toISOString().slice(11,16); } catch(e){ return ''; } } %>
+    <label>Date<br><input type="date" name="due_date" value="<%= fmtDateOnly(event.due_date) %>"></label>
+    <label>Time (optionnel)<br><input type="time" name="time" value="<%= fmtTimeOnly(event.due_date) %>"></label>
+    <label>Class<br><input name="class" value="<%= event.class || '' %>"></label>
+    <label>Attachment (URL)<br><input name="attachment" type="url" value="<%= event.attachment || '' %>"></label>
+    <label>Description<br><textarea name="description"><%= event.description || '' %></textarea></label>
+    <div class="form-actions">
+      <button class="button primary" type="submit">Save</button>
+      <a class="button muted" href="/events/<%= event.id %>">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

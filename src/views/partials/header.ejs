@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1><a href="/">Agenda</a></h1>
+      <div class="kicker">Planifiez, suivez et partagez vos événements</div>
+    </div>
+    <div class="header-right">
+      <form class="search" action="/" method="GET" style="display:flex; gap:0.5rem; align-items:center; margin-right:0.5rem;">
+        <input name="q" type="search" placeholder="Recherche..." style="padding:0.45rem 0.6rem; border-radius:8px; border:1px solid rgba(0,0,0,0.06);">
+        <button class="button secondary" type="submit">Rechercher</button>
+      </form>
+      <nav>
+        <a class="button outline" href="/agenda">Voir le calendrier</a>
+        <a class="button secondary" href="/events/new">Nouvel événement</a>
+        <a class="button" href="/login">Login</a>
+      </nav>
+    </div>
+  </header>
+  <main>

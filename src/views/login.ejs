@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+
+<section class="auth-page">
+  <div class="card login-card">
+    <h2>Connexion</h2>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="auth-form">
+      <label>Email ou nom d'utilisateur
+        <input name="identifier" type="text" required placeholder="Email ou username" />
+      </label>
+
+      <label>Mot de passe
+        <div class="pw-row">
+          <input name="password" type="password" required placeholder="Mot de passe" id="pw-field" />
+          <button type="button" class="pw-toggle" onclick="(function(){const f=document.getElementById('pw-field'); f.type = f.type==='password' ? 'text' : 'password'; })()">👁</button>
+        </div>
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" name="remember" value="1" /> Se souvenir de moi
+      </label>
+
+      <div class="form-actions">
+        <button class="button primary" type="submit">Se connecter</button>
+        <a class="button muted" href="/">Annuler</a>
+      </div>
+    </form>
+
+    <p class="small muted">Pas de compte ? <a href="/register">S'inscrire</a></p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -20,7 +20,7 @@ const sequelize = new Sequelize(
 const Users = UserModel(sequelize, DataTypes);
 const Homeworks = HomeworkModel(sequelize, DataTypes)
 
-sequelize.sync({force: true}).then((_) => {
+sequelize.sync().then((_) => {
     console.log("The database has been synchronized");
 }).catch((e) => {
     console.log(`The database couldn't be synchronized`, e);
