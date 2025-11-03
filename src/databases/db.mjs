@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import dotenv from "dotenv";
 import { UserModel } from "../models/users.mjs";
+import { HomeworkModel } from "../models/devoirs.mjs";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const sequelize = new Sequelize(
 );
 
 const Users = UserModel(sequelize, DataTypes);
+const Homeworks = HomeworkModel(sequelize, DataTypes)
 
 sequelize.sync({force: true}).then((_) => {
     console.log("The database has been synchronized");
@@ -32,4 +34,4 @@ try {
 }
 
 export default sequelize;
-export { Users, sequelize };
+export { Users, Homeworks, sequelize };
