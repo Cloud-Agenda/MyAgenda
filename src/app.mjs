@@ -40,6 +40,7 @@ app.use(
 app.use("/", homeworkRoutes);
 app.use("/", authRoutes);
 
-app.listen(3000, () =>
-  console.log("✅ Server running on http://localhost:3000")
-);
+const port = process.env.DB_PORT;
+app.listen(port, () => {
+  console.log(`✅ Server running on http://localhost:${port}`);
+});
