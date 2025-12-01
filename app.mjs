@@ -49,7 +49,11 @@ app.use((req, res, next) => {
 import { Homeworks } from "./databases/db.mjs";
 // Route principale "/"
 app.get("/", (req, res) => {
-  res.redirect("/events");
+  if (req.session.user) {
+    res.redirect("/events");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.use("/", homeworkRoutes);
