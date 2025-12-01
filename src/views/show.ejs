@@ -1,34 +1,77 @@
 <%- include('partials/header') %>
 
-<section class="show card">
-  <h2><%= event.title %></h2>
-  <% function fmtDate(d){ if(!d) return '-'; try { return (new Date(d)).toISOString().slice(0,10); } catch(e){ return '-'; } } %>
-  <% function fmtTime(d){ if(!d) return '-'; try { return (new Date(d)).toISOString().slice(11,16); } catch(e){ return '-'; } } %>
-  <div class="meta">
-    <div class="item"><strong>Date:</strong> <%= fmtDate(event.due_date) %></div>
-    <div class="item"><strong>Time:</strong> <%= fmtTime(event.due_date) %></div>
-    <div class="item"><strong>Subject:</strong> <%= event.subject || '-' %></div>
-    <div class="item"><strong>Class:</strong> <%= event.class || '-' %></div>
-  </div>
-  <div>
-    <h4>Description</h4>
-    <p class="desc"><%= event.description || '-' %></p>
-  </div>
+    <section class="show card">
+        <h2>
+            <%= event.title %>
+        </h2>
+        <div class="meta">
+            <div class="item"><strong>Matière:</strong>
+                <%= event.subject || '-' %>
+            </div>
+            <div class="item"><strong>Classe:</strong>
+                <%= event.class || '-' %>
+            </div>
+            <div class="item"><strong>Créé par:</strong>
+                <%= event.creator ? event.creator.username : 'Inconnu' %>
+            </div>
+            <div class="item"><strong>Date:</strong>
+                <%= event.due_date ? new Date(event.due_date).toLocaleDateString('fr-FR') : '-' %>
+            </div>
+            <% if (event.attachment) { %>
+                <div class="item"><strong>Pièce jointe:</strong> <a href="<%= event.attachment %>"
+                        target="_blank">Voir</a>
+                </div>
+                <% } %>
+        </div>
+        <div>
+            <h4>Description</h4>
+            <p class="desc">
+                <%= event.description || '-' %>
+            </p>
+        </div>
 
-  <% if (event.attachment) { %>
-    <div style="margin-top:0.5rem;">
-      <strong>Attachment:</strong> <a href="<%= event.attachment %>" target="_blank" rel="noopener noreferrer">Voir</a>
-    </div>
-  <% } %>
+        <div class="comments-section">
+            <h4>Commentaires</h4>
+            <% if (event.Comments && event.Comments.length> 0) { %>
+                <div class="comments-list">
+                    <% event.Comments.forEach(comment=> { %>
+                        <div class="comment">
+                            <div class="comment-header">
+                                <strong>
+                                    <%= comment.User ? comment.User.username : 'Utilisateur inconnu' %>
+                                </strong>
+                                <span class="comment-date">
+                                    <%= new Date(comment.createdAt).toLocaleString('fr-FR') %>
+                                </span>
+                            </div>
+                            <div class="comment-content">
+                                <%= comment.content %>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } else { %>
+                    <p class="no-comments">Aucun commentaire pour le moment.</p>
+                    <% } %>
 
-  <div class="actions">
-    <a class="button secondary" href="/events/<%= event.id %>/edit">Edit</a>
-    <a class="button outline" href="/events/<%= event.id %>/ical">Export iCal</a>
-    <form action="/events/<%= event.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Delete this event?');" style="display:inline">
-      <button class="button danger" type="submit">Delete</button>
-    </form>
-    <a class="button muted" href="/">Back</a>
-  </div>
-</section>
+                        <form action="/events/<%= event.id %>/comments" method="POST" class="comment-form">
+                            <div class="form-group">
+                                <textarea name="content" placeholder="Ajouter un commentaire..." required
+                                    rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="button primary">Envoyer</button>
+                        </form>
+        </div>
 
-<%- include('partials/footer') %>
+        <div class="actions">
+            <a class="button secondary" href="/events/<%= event.id %>/edit">Modifier</a>
+            <a class="button outline" href="/events/<%= event.id %>/ical">Exporter iCal</a>
+            <form action="/events/<%= event.id %>?_method=DELETE" method="POST"
+                onsubmit="return confirm('Supprimer cet événement ?');" style="display:inline">
+                <button class="button danger" type="submit">Supprimer</button>
+            </form>
+            <a class="button muted" href="/">Retour</a>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>

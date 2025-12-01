@@ -29,5 +29,10 @@ export const HomeworkModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    creatorId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      comment: "ID de l'utilisateur qui a créé le devoir",
+    },
   });
 };

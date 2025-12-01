@@ -1,38 +1,31 @@
 <%- include('partials/header') %>
 
-<section class="auth-page">
-  <div class="card login-card">
-    <h2>Inscription</h2>
+<% var _form = typeof form !== 'undefined' ? form : {}; %>
+<section class="form card">
+  <h2>Créer un compte</h2>
+  <% if (error) { %>
+    <div class="error" style="color:red; margin-bottom:1em"><%= error %></div>
+  <% } %>
+  <form action="/register" method="POST" novalidate>
+    <label>Nom d'utilisateur<br><input name="username" required value="<%= _form.username ? _form.username : '' %>"></label>
+    <label>Email<br><input name="email" type="email" required value="<%= _form.email ? _form.email : '' %>"></label>
+    <label>Mot de passe<br><input name="password" type="password" required></label>
 
-    <% if (typeof error !== 'undefined' && error) { %>
-      <div class="alert error"><%= error %></div>
-    <% } %>
+    <label>Classe<br>
+      <% const classes = ['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','4A','4B','4C','4D']; %>
+      <select name="classe" required>
+        <option value="">-- Choisir la classe --</option>
+        <% classes.forEach(function(c){ %>
+          <option value="<%= c %>" <%= (_form.classe === c ? 'selected' : '') %>><%= c %></option>
+        <% }) %>
+      </select>
+    </label>
 
-    <form action="/register" method="POST" class="auth-form">
-      <label>Nom d'utilisateur
-        <input name="username" type="text" required placeholder="Nom d'utilisateur" />
-      </label>
-
-      <label>Email
-        <input name="email" type="email" required placeholder="Email" />
-      </label>
-
-      <label>Mot de passe
-        <input name="password" type="password" required placeholder="Mot de passe" />
-      </label>
-
-      <label>Classe
-        <input name="classe" type="text" placeholder="Ex: 3A" />
-      </label>
-
-      <div class="form-actions">
-        <button class="button primary" type="submit">S'inscrire</button>
-        <a class="button muted" href="/">Annuler</a>
-      </div>
-    </form>
-
-    <p class="small muted">Déjà un compte ? <a href="/login">Se connecter</a></p>
-  </div>
+    <div class="form-actions">
+      <button class="button primary" type="submit">S'inscrire</button>
+      <a class="button muted" href="/login">Déjà inscrit ?</a>
+    </div>
+  </form>
 </section>
 
 <%- include('partials/footer') %>

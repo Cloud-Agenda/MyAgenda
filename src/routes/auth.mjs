@@ -24,7 +24,8 @@ router.post("/login", async (req, res) => {
     const valid = await bcrypt.compare(password, found.password);
     if (!valid) return res.render("login", { error: "Mot de passe incorrect" });
 
-    req.session.user = { id: found.id, username: found.username, email: found.email };
+    // Stocke la classe dans la session pour filtrage côté agenda/index
+    req.session.user = { id: found.id, username: found.username, email: found.email, classe: found.classe };
     res.redirect("/events");
   } catch (error) {
     console.error(error);
@@ -42,6 +43,13 @@ router.post("/register", async (req, res) => {
   const { username, email, password, classe } = req.body;
 
   try {
+    // Vérifie si le nom d'utilisateur existe déjà
+    const existingUser = await Users.findOne({ where: { username } });
+    if (existingUser) {
+      // Affiche un message d'erreur sur la page d'inscription
+      return res.render("register", { error: "Ce nom d'utilisateur est déjà pris.", form: req.body });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await Users.create({
@@ -54,7 +62,7 @@ router.post("/register", async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.error(error);
-    res.render("register", { error: "Erreur lors de l'inscription" });
+    res.render("register", { error: "Erreur lors de l'inscription", form: req.body });
   }
 });
 

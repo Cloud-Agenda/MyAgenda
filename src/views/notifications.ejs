@@ -1,0 +1,169 @@
+<%- include('partials/header') %>
+
+    <section class="card">
+        <div class="notifications-header">
+            <h2>Notifications (<%= unreadCount %> non lues)</h2>
+            <% if (unreadCount> 0) { %>
+                <button class="button primary" onclick="markAllAsRead()">Tout marquer comme lu</button>
+                <% } %>
+        </div>
+
+        <% if (notifications.length===0) { %>
+            <div class="empty-state">
+                <h3>Aucune notification</h3>
+                <p class="small">Vous n'avez pas encore de notifications.</p>
+            </div>
+            <% } else { %>
+                <div class="notifications-list">
+                    <% notifications.forEach(function(notif){ %>
+                        <div class="notification-item <%= notif.read ? 'read' : 'unread' %>" data-id="<%= notif.id %>">
+                            <div class="notification-icon">
+                                <% if (notif.type==='reminder' ) { %>
+                                    ⏰
+                                    <% } else if (notif.type==='new_homework' ) { %>
+                                        📚
+                                        <% } else { %>
+                                            💬
+                                            <% } %>
+                            </div>
+                            <div class="notification-content">
+                                <p>
+                                    <%= notif.message %>
+                                </p>
+                                <small>
+                                    <%= new Date(notif.createdAt).toLocaleString('fr-FR') %>
+                                </small>
+                                <% if (notif.Homework) { %>
+                                    <br><a href="/events/<%= notif.Homework.id %>">Voir le devoir</a>
+                                    <% } %>
+                            </div>
+                            <% if (!notif.read) { %>
+                                <button class="button outline" onclick="markAsRead('<%= notif.id %>')">Marquer comme
+                                    lu</button>
+                                <% } %>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } %>
+    </section>
+
+    <style>
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-item.unread {
+            background-color: #f0f7ff;
+            border-color: #4a90e2;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .notification-item.read {
+            background-color: #f9f9f9;
+            opacity: 0.8;
+        }
+
+        .notification-icon {
+            font-size: 2rem;
+            min-width: 3rem;
+            text-align: center;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content p {
+            margin: 0 0 0.5rem 0;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .notification-content small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .notification-content a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .notification-content a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <script>
+        async function markAsRead(notifId) {
+            try {
+                const response = await fetch(`/notifications/${notifId}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la mise à jour');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Erreur de connexion');
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                const response = await fetch('/notifications/read-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la mise à jour');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Erreur de connexion');
+            }
+        }
+    </script>
+
+    <%- include('partials/footer') %>

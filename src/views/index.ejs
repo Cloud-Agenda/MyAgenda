@@ -1,53 +1,131 @@
 <%- include('partials/header') %>
 
-<section class="hero card">
-  <div class="hero-left">
-    <h2>Votre agenda simple et rapide</h2>
-    <p class="kicker">Créez des événements, consultez le calendrier et partagez vos rendez‑vous. Commencez en ajoutant votre premier événement ou explorez le calendrier.</p>
-    <div class="hero-cta">
-      <a class="button primary" href="/events/new">Nouvel événement</a>
-      <a class="button outline" href="/agenda">Voir le calendrier</a>
-      <a class="button secondary" href="/seed">Seed sample data</a>
+  <section class="hero card">
+    <div class="hero-left">
+      <h2>Votre agenda simple et productif</h2>
+      <p class="kicker">Créez des événements, consultez le calendrier et suivez facilement les devoirs. Interface claire
+        pour être plus efficace.</p>
+      <div class="hero-cta">
+        <a class="button primary" href="/events/new">Nouvel événement</a>
+        <a class="button outline" href="/agenda">Voir le calendrier</a>
+      </div>
     </div>
-  </div>
-  <div class="hero-right">
-    <!-- petit aperçu ou illustration (placeholder) -->
-    <div class="hero-card">Prochains éléments • <strong><%= events.length %></strong></div>
-  </div>
-</section>
-
-<section class="list card">
-  <% if (events.length === 0) { %>
-    <div class="empty-state">
-      <h3>Aucun événement pour le moment</h3>
-      <p class="small">Ajoutez votre premier événement pour commencer à organiser votre agenda.</p>
-      <a class="button primary" href="/events/new">Créer un événement</a>
+    <div class="hero-right">
+      <div class="hero-card">Prochains jours • <strong>
+          <%= events.length %>
+        </strong></div>
     </div>
-  <% } else { %>
-    <% function fmtDate(d){ if(!d) return '-'; try { return (new Date(d)).toISOString().slice(0,10); } catch(e){ return '-'; } } %>
-    <table>
-      <thead>
-        <tr><th>Title</th><th>Subject</th><th>Date</th><th>Class</th><th></th></tr>
-      </thead>
-      <tbody>
-        <% events.forEach(function(ev){ %>
-          <tr>
-            <td><a href="/events/<%= ev.id %>"><%= ev.title %></a></td>
-            <td><%= ev.subject || '-' %></td>
-            <td><%= fmtDate(ev.due_date) %></td>
-            <td><%= ev.class || '-' %></td>
-            <td class="actions">
-              <a href="/events/<%= ev.id %>/edit">Edit</a>
-              <a class="button outline" href="/events/<%= ev.id %>/ical">iCal</a>
-              <form action="/events/<%= ev.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Delete this event?');" style="display:inline">
-                <button type="submit">Delete</button>
-              </form>
-            </td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  <% } %>
-</section>
+  </section>
 
-<%- include('partials/footer') %>
+  <section class="filter card" style="margin-top:1rem; padding: 1rem;">
+    <form action="/events" method="GET" style="display:flex; align-items:center; gap:1rem; margin:0; flex-wrap:wrap;">
+      <label for="subject-filter" style="margin:0; font-weight:bold;">Filtrer par matière :</label>
+      <select name="subject" id="subject-filter" style="margin:0; width:auto;">
+        <option value="">Toutes les matières</option>
+        <% const
+          subjects=['Mathématiques','Français','Anglais','Histoire','Géographie','SVT','Physique','Chimie','Informatique','EPS'];
+          %>
+          <% subjects.forEach(function(s){ %>
+            <option value="<%= s %>" <%=(typeof currentSubject !=='undefined' && currentSubject===s) ? 'selected' : ''
+              %>><%= s %>
+            </option>
+            <% }) %>
+      </select>
+
+      <label for="sort-filter" style="margin:0; font-weight:bold;">Trier par date :</label>
+      <select name="sort" id="sort-filter" style="margin:0; width:auto;">
+        <option value="asc" <%=(typeof currentSort !=='undefined' && currentSort==='asc' ) ? 'selected' : '' %>>Plus
+          ancien au plus récent</option>
+        <option value="desc" <%=(typeof currentSort !=='undefined' && currentSort==='desc' ) ? 'selected' : '' %>>Plus
+          récent au plus ancien</option>
+      </select>
+
+      <button type="submit" class="button primary" style="margin:0;">Appliquer</button>
+    </form>
+  </section>
+
+  <section class="list card" style="margin-top:1rem;">
+    <% if (events.length===0) { %>
+      <div class="empty-state">
+        <h3>Aucun événement pour le moment</h3>
+        <p class="small">Ajoutez votre premier événement pour commencer à organiser votre agenda.</p>
+        <a class="button primary" href="/events/new">Créer un événement</a>
+      </div>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Fait</th>
+              <th>Titre</th>
+              <th>Matière</th>
+              <th>Classe</th>
+              <th>Créé par</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% events.forEach(function(ev){ %>
+              <tr>
+                <td>
+                  <input type="checkbox" class="completion-checkbox" data-homework-id="<%= ev.id %>" <%=ev.isCompleted
+                    ? 'checked' : '' %>
+                  onchange="toggleCompletion(<%= ev.id %>, this)">
+                </td>
+                <td><a href="/events/<%= ev.id %>">
+                    <%= ev.title %>
+                  </a></td>
+                <td>
+                  <%= ev.subject || '-' %>
+                </td>
+                <td>
+                  <%= ev.class || '-' %>
+                </td>
+                <td><strong>
+                    <%= ev.creator ? ev.creator.username : 'Inconnu' %>
+                  </strong></td>
+                <td>
+                  <%= ev.due_date ? new Date(ev.due_date).toLocaleDateString('fr-FR') : '-' %>
+                </td>
+                <td class="actions">
+                  <a href="/events/<%= ev.id %>/edit">Modifier</a>
+                  <a class="button outline" href="/events/<%= ev.id %>/ical">iCal</a>
+                  <form action="/events/<%= ev.id %>?_method=DELETE" method="POST"
+                    onsubmit="return confirm('Supprimer cet événement ?');" style="display:inline">
+                    <button class="button danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+              <% }); %>
+          </tbody>
+        </table>
+
+        <script>
+          async function toggleCompletion(homeworkId, checkbox) {
+            try {
+              const response = await fetch(`/events/${homeworkId}/toggle-completion`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                checkbox.checked = data.completed;
+              } else {
+                alert('Erreur lors de la mise à jour');
+                checkbox.checked = !checkbox.checked; // Revert
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert('Erreur de connexion');
+              checkbox.checked = !checkbox.checked; // Revert
+            }
+          }
+        </script>
+        <% } %>
+  </section>
+
+  <%- include('partials/footer') %>

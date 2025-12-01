@@ -1,22 +1,49 @@
 <%- include('partials/header') %>
 
-<section class="form card">
-  <h2>Edit homework</h2>
-  <form action="/events/<%= event.id %>?_method=PUT" method="POST">
-    <label>Title<br><input name="title" required value="<%= event.title %>"></label>
-    <label>Subject<br><input name="subject" value="<%= event.subject || '' %>"></label>
-    <% function fmtDateOnly(d){ if(!d) return ''; try { return (new Date(d)).toISOString().slice(0,10); } catch(e){ return ''; } } %>
-    <% function fmtTimeOnly(d){ if(!d) return ''; try { return (new Date(d)).toISOString().slice(11,16); } catch(e){ return ''; } } %>
-    <label>Date<br><input type="date" name="due_date" value="<%= fmtDateOnly(event.due_date) %>"></label>
-    <label>Time (optionnel)<br><input type="time" name="time" value="<%= fmtTimeOnly(event.due_date) %>"></label>
-    <label>Class<br><input name="class" value="<%= event.class || '' %>"></label>
-    <label>Attachment (URL)<br><input name="attachment" type="url" value="<%= event.attachment || '' %>"></label>
-    <label>Description<br><textarea name="description"><%= event.description || '' %></textarea></label>
-    <div class="form-actions">
-      <button class="button primary" type="submit">Save</button>
-      <a class="button muted" href="/events/<%= event.id %>">Cancel</a>
-    </div>
-  </form>
-</section>
+  <section class="form card">
+    <h2>Modifier le devoir</h2>
+    <form action="/events/<%= event.id %>?_method=PUT" method="POST" novalidate>
+      <label>Titre<br><input name="title" required value="<%= event.title %>"></label>
 
-<%- include('partials/footer') %>
+      <label>Matière<br>
+        <select name="subject" required>
+          <% const
+            subjects=['Mathématiques','Français','Anglais','Histoire','Géographie','SVT','Physique','Chimie','Informatique','EPS'];
+            %>
+            <option value="">-- Choisir une matière --</option>
+            <% subjects.forEach(function(s){ %>
+              <option value="<%= s %>" <%=(event.subject===s ? 'selected' : '' ) %>><%= s %>
+              </option>
+              <% }) %>
+        </select>
+      </label>
+
+      <label>Date<br><input type="date" name="due_date"
+          value="<%= event.due_date ? event.due_date.toISOString().slice(0,10) : '' %>"></label>
+
+      <label>Classe<br>
+        <% if (user && user.isAdmin) { %>
+          <% const classes=['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','4A','4B','4C','4D']; %>
+            <select name="class" required>
+              <option value="">-- Choisir la classe --</option>
+              <% classes.forEach(function(c){ %>
+                <option value="<%= c %>" <%=(event.class===c ? 'selected' : '' ) %>><%= c %>
+                </option>
+                <% }) %>
+            </select>
+            <% } else { %>
+              <input type="hidden" name="class" value="<%= event.class %>">
+              <input type="text" value="<%= event.class %>" disabled style="background-color: #f0f0f0; color: #666;">
+              <% } %>
+      </label>
+
+      <label>Pièce jointe (URL)<br><input name="attachment" type="url" value="<%= event.attachment || '' %>"></label>
+      <label>Description<br><textarea name="description"><%= event.description || '' %></textarea></label>
+      <div class="form-actions">
+        <button class="button primary" type="submit">Enregistrer</button>
+        <a class="button muted" href="/events/<%= event.id %>">Annuler</a>
+      </div>
+    </form>
+  </section>
+
+  <%- include('partials/footer') %>

@@ -38,32 +38,8 @@
                         <div class="day-num">
                           <%= day %>
                         </div>
-                        <% if (has) { %>
-                          <span class="badge">
-                            <%= eventsByDay[day].length %>
-                          </span>
-                          <% } %>
-                      </div>
-                      <div class="day-events">
-                        <!-- new wrapper to cap events height and allow scroll for overflow -->
-                        <div class="events-list">
-                          <% (eventsByDay[day] || []).slice(0,3).forEach(function(ev){ %>
-                            <!-- n'affiche que le titre ; stocke l'objet évènement en JSON dans data-ev -->
-                            <div class="event">
-                              <button class="ev-title" type="button" data-ev='<%- JSON.stringify(ev) %>'
-                                aria-haspopup="dialog">
-                                <%= ev.title %>
-                              </button>
-                            </div>
-                            <% }) %>
-                        </div>
-                        <% if (has && eventsByDay[day].length> 3) { %>
-                          <div class="more">+<%= eventsByDay[day].length - 3 %> autres</div>
-                          <% } %>
-                      </div>
-                    </td>
-                    <% } %>
-                      <% }); %>
+                        <% } %>
+                          <% }); %>
           </tr>
           <% }); %>
       </tbody>
@@ -99,7 +75,6 @@
         const parts = [];
         if (evObj.subject) parts.push('Matière: ' + evObj.subject);
         if (evObj.class) parts.push('Classe: ' + evObj.class);
-        if (evObj.creator && evObj.creator.username) parts.push('Créé par: ' + evObj.creator.username);
         if (evObj.due_date) {
           const d = new Date(evObj.due_date);
           parts.push('Date: ' + d.toISOString().slice(0, 10));
