@@ -16,17 +16,17 @@
       <nav>
         <a class="button outline" href="/agenda" aria-label="Voir calendrier">Calendrier</a>
         <a class="button secondary" href="/events/new" aria-label="Créer un devoir">Nouveau devoir</a>
-        <% if (user) { %>
+        <% if (locals.user) { %>
           <a class="button outline" href="/notifications" aria-label="Notifications" style="position:relative;">
             🔔 Notifications
             <span id="notif-badge" style="display:none; position:absolute; top:-5px; right:-5px; background:red; color:white; border-radius:50%; width:20px; height:20px; font-size:12px; text-align:center; line-height:20px;"></span>
           </a>
         <% } %>
-        <% if (user && user.isAdmin) { %>
+        <% if (locals.user && locals.user.isAdmin) { %>
           <a class="button outline" href="/admin/users">Admin</a>
         <% } %>
-        <% if (user) { %>
-          <span style="margin-right: 1rem;">Salut, <strong><%= user.username %></strong></span>
+        <% if (locals.user) { %>
+          <span style="margin-right: 1rem;">Salut, <strong><%= locals.user.username %></strong></span>
           <a class="button muted" href="/logout" aria-label="Se déconnecter">Déconnexion</a>
         <% } else { %>
           <a class="button muted" href="/login" aria-label="Se connecter">Connexion</a>
@@ -36,7 +36,7 @@
   </header>
   <main>
   
-  <% if (user) { %>
+  <% if (locals.user) { %>
   <script>
     // Fetch unread notification count
     async function updateNotificationBadge() {

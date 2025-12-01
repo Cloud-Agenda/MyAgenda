@@ -33,7 +33,7 @@
                         </td>
                         <td>
                             <div style="display:flex; gap:0.5rem;">
-                                <% if (u.id !==user.id) { %>
+                                <% if (locals.user && u.id !==locals.user.id) { %>
                                     <form action="/admin/users/<%= u.id %>/toggle-admin" method="POST"
                                         style="margin:0;">
                                         <button type="submit" class="button small outline">

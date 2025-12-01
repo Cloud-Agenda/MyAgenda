@@ -42,6 +42,7 @@ app.use(
 // Middleware pour rendre l'utilisateur disponible dans toutes les vues
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
+  // console.log("Middleware user:", res.locals.user ? res.locals.user.username : "null");
   next();
 });
 

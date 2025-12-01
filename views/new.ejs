@@ -28,7 +28,7 @@
                 value="<%= _form.due_date ? _form.due_date : '' %>"></label>
 
             <label>Classe<br>
-              <% if (user && user.isAdmin) { %>
+              <% if (locals.user && locals.user.isAdmin) { %>
                 <select name="class" required>
                   <option value="">-- Choisir la classe --</option>
                   <% const classes=['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','4A','4B','4C','4D']; %>
@@ -38,8 +38,8 @@
                       <% }) %>
                 </select>
                 <% } else { %>
-                  <input type="hidden" name="class" value="<%= user.classe %>">
-                  <input type="text" value="<%= user.classe %>" disabled
+                  <input type="hidden" name="class" value="<%= locals.user.classe %>">
+                  <input type="text" value="<%= locals.user.classe %>" disabled
                     style="background-color: #f0f0f0; color: #666;">
                   <% } %>
             </label>
