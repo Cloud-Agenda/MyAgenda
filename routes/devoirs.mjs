@@ -150,7 +150,7 @@ router.get("/events/:id", async (req, res) => {
         { model: Users, as: "creator", attributes: ["username"] },
         {
           model: Comments,
-          include: [{ model: Users, attributes: ["username"] }],
+          include: [{ model: Users, as: "User", attributes: ["username"] }],
           order: [['createdAt', 'ASC']]
         }
       ],

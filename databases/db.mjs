@@ -49,7 +49,7 @@ Notifications.belongsTo(Homeworks, { foreignKey: 'homeworkId' });
 
 // Relations pour les commentaires
 Users.hasMany(Comments, { foreignKey: 'userId' });
-Comments.belongsTo(Users, { foreignKey: 'userId' });
+Comments.belongsTo(Users, { foreignKey: 'userId', as: 'User' });
 Homeworks.hasMany(Comments, { foreignKey: 'homeworkId' });
 Comments.belongsTo(Homeworks, { foreignKey: 'homeworkId' });
 
