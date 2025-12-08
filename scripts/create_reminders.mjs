@@ -56,6 +56,8 @@ export async function createReminders() {
                         read: false
                     });
                     console.log(`Created reminder for user ${user.username} - homework ${homework.title}`);
+                } else {
+                    console.log(`Reminder already exists for user ${user.username} - homework ${homework.title}`);
                 }
             }
         }
