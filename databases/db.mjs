@@ -17,7 +17,7 @@ const sequelize = new Sequelize(
     dialect: process.env.DB_DIALECT,
     port: process.env.DB_PORT,
     logging: false,
-    dialectOptions: {
+    dialectOptions: process.env.DB_SSL === 'false' ? {} : {
       ssl: {
         require: true,
         rejectUnauthorized: false

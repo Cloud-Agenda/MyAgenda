@@ -47,3 +47,20 @@ PORT=8080
 ```
 
 > **Note :** Sur Azure App Service, il est recommandé de définir ces variables directement dans l'interface du portail Azure (Configuration > Application settings) plutôt que de commiter un fichier `.env`.
+
+## Lancement avec Docker Compose
+
+Pour lancer la base de données MySQL localement sans installation manuelle, utilisez Docker Compose.
+
+1.  Assurez-vous d'avoir Docker et Docker Compose installés.
+2.  Lancez la commande suivante à la racine du projet :
+
+```bash
+docker-compose up --build
+```
+
+Cela va :
+*   Démarrer un conteneur MySQL (accessible sur le port 3307 depuis votre machine).
+
+*Note : La base de données sera automatiquement configurée pour fonctionner avec l'application.*
+
