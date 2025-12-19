@@ -1,6 +1,7 @@
 import express from "express";
 import { Homeworks, Users, HomeworkCompletions, Notifications, Comments } from "../databases/db.mjs";
 import { Op } from "sequelize";
+import { body, validationResult } from "express-validator";
 
 const router = express.Router();
 
@@ -79,15 +80,28 @@ router.get("/events", async (req, res) => {
 
 // New form
 router.get("/events/new", (req, res) => {
+  if (!req.session.user) return res.redirect("/login");
   res.render("new");
 });
 
 // Create
-router.post("/events", async (req, res) => {
+router.post("/events", [
+  body('title').trim().escape().notEmpty().withMessage('Titre requis'),
+  body('subject').trim().escape().notEmpty(),
+  body('description').trim().escape(),
+  body('attachment').trim(),
+  body('class').trim().escape()
+], async (req, res) => {
   const { title, subject, due_date, class: classe, attachment, description } = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("new", { error: errors.array()[0].msg, form: req.body });
+  }
+
   try {
     // Validation minimale côté serveur
-    if (!title || !subject || !due_date || !classe) {
+    if (!title || !subject || !due_date) {
       return res.render("new", { error: "Tous les champs obligatoires doivent être remplis.", form: req.body });
     }
     // Conversion date
@@ -443,6 +457,9 @@ router.get("/agenda", async (req, res) => {
 
 // Seed sample data
 router.get("/seed", async (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).send("Forbidden in production");
+  }
   try {
     await Homeworks.bulkCreate([
       { title: "Math homework", subject: "Math", due_date: new Date(), description: "Exercices 1-10", class: "3A" },

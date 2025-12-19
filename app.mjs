@@ -1,7 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
+import cookieParser from "cookie-parser";
+import csrf from "csurf";
 import authRoutes from "./routes/auth.mjs";
 import homeworkRoutes from "./routes/devoirs.mjs";
 import adminRoutes from "./routes/admin.mjs";
@@ -30,19 +34,26 @@ if (methodOverride) {
 }
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 app.use(
   session({
-    secret: "super_secret_key", // remplacer par une vraie clé en prod
+    secret: process.env.SESSION_SECRET || "fallback_secret_dev",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // true en prod avec HTTPS
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // true en prod avec HTTPS
+      httpOnly: true,
+    },
   })
 );
 
-// Middleware pour rendre l'utilisateur disponible dans toutes les vues
+// CSRF Protection (must be after session/cookieParser and before routes)
+app.use(csrf({ cookie: false })); // use session for storage
+
+// Middleware pour rendre l'utilisateur et le token CSRF disponibles dans toutes les vues
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
-  // console.log("Middleware user:", res.locals.user ? res.locals.user.username : "null");
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
 

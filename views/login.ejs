@@ -1,16 +1,21 @@
 <%- include('partials/header') %>
 
-<section class="form card">
-  <h2>Connexion</h2>
-  <% if (error) { %><div class="error" style="color:red; margin-bottom:1em"><%= error %></div><% } %>
-  <form action="/login" method="POST" novalidate>
-    <label>Nom d'utilisateur ou Email<br><input name="identifier" required></label>
-    <label>Mot de passe<br><input name="password" type="password" required></label>
-    <div class="form-actions">
-      <button class="button primary" type="submit">Se connecter</button>
-      <a class="button muted" href="/register">Créer un compte</a>
-    </div>
-  </form>
-</section>
+  <section class="form card">
+    <h2>Connexion</h2>
+    <% if (error) { %>
+      <div class="error" style="color:red; margin-bottom:1em">
+        <%= error %>
+      </div>
+      <% } %>
+        <form action="/login" method="POST" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <label>Nom d'utilisateur ou Email<br><input name="identifier" required></label>
+          <label>Mot de passe<br><input name="password" type="password" required></label>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Se connecter</button>
+            <a class="button muted" href="/register">Créer un compte</a>
+          </div>
+        </form>
+  </section>
 
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>

@@ -3,6 +3,7 @@
   <section class="form card">
     <h2>Modifier le devoir</h2>
     <form action="/events/<%= event.id %>?_method=PUT" method="POST" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label>Titre<br><input name="title" required value="<%= event.title %>"></label>
 
       <label>Matière<br>

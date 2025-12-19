@@ -36,12 +36,14 @@
                                 <% if (locals.user && u.id !==locals.user.id) { %>
                                     <form action="/admin/users/<%= u.id %>/toggle-admin" method="POST"
                                         style="margin:0;">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <button type="submit" class="button small outline">
                                             <%= u.isAdmin ? 'Retirer Admin' : 'Mettre Admin' %>
                                         </button>
                                     </form>
                                     <form action="/admin/users/<%= u.id %>?_method=DELETE" method="POST"
                                         style="margin:0;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <button type="submit" class="button small danger">Supprimer</button>
                                     </form>
                                     <% } else { %>

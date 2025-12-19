@@ -92,6 +92,7 @@
                   <a class="button outline" href="/events/<%= ev.id %>/ical">iCal</a>
                   <form action="/events/<%= ev.id %>?_method=DELETE" method="POST"
                     onsubmit="return confirm('Supprimer cet événement ?');" style="display:inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button class="button danger" type="submit">Supprimer</button>
                   </form>
                 </td>
@@ -106,7 +107,8 @@
               const response = await fetch(`/events/${homeworkId}/toggle-completion`, {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'CSRF-Token': '<%= csrfToken %>'
                 }
               });
 

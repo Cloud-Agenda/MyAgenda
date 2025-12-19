@@ -1,31 +1,37 @@
 <%- include('partials/header') %>
 
-<% var _form = typeof form !== 'undefined' ? form : {}; %>
-<section class="form card">
-  <h2>Créer un compte</h2>
-  <% if (error) { %>
-    <div class="error" style="color:red; margin-bottom:1em"><%= error %></div>
-  <% } %>
-  <form action="/register" method="POST" novalidate>
-    <label>Nom d'utilisateur<br><input name="username" required value="<%= _form.username ? _form.username : '' %>"></label>
-    <label>Email<br><input name="email" type="email" required value="<%= _form.email ? _form.email : '' %>"></label>
-    <label>Mot de passe<br><input name="password" type="password" required></label>
+  <% var _form=typeof form !=='undefined' ? form : {}; %>
+    <section class="form card">
+      <h2>Créer un compte</h2>
+      <% if (error) { %>
+        <div class="error" style="color:red; margin-bottom:1em">
+          <%= error %>
+        </div>
+        <% } %>
+          <form action="/register" method="POST" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <label>Nom d'utilisateur<br><input name="username" required
+                value="<%= _form.username ? _form.username : '' %>"></label>
+            <label>Email<br><input name="email" type="email" required
+                value="<%= _form.email ? _form.email : '' %>"></label>
+            <label>Mot de passe<br><input name="password" type="password" required></label>
 
-    <label>Classe<br>
-      <% const classes = ['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','4A','4B','4C','4D']; %>
-      <select name="classe" required>
-        <option value="">-- Choisir la classe --</option>
-        <% classes.forEach(function(c){ %>
-          <option value="<%= c %>" <%= (_form.classe === c ? 'selected' : '') %>><%= c %></option>
-        <% }) %>
-      </select>
-    </label>
+            <label>Classe<br>
+              <% const classes=['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','4A','4B','4C','4D']; %>
+                <select name="classe" required>
+                  <option value="">-- Choisir la classe --</option>
+                  <% classes.forEach(function(c){ %>
+                    <option value="<%= c %>" <%=(_form.classe===c ? 'selected' : '' ) %>><%= c %>
+                    </option>
+                    <% }) %>
+                </select>
+            </label>
 
-    <div class="form-actions">
-      <button class="button primary" type="submit">S'inscrire</button>
-      <a class="button muted" href="/login">Déjà inscrit ?</a>
-    </div>
-  </form>
-</section>
+            <div class="form-actions">
+              <button class="button primary" type="submit">S'inscrire</button>
+              <a class="button muted" href="/login">Déjà inscrit ?</a>
+            </div>
+          </form>
+    </section>
 
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>

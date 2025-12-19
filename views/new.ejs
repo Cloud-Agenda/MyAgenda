@@ -9,6 +9,7 @@
         </div>
         <% } %>
           <form action="/events" method="POST" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <label>Titre<br><input name="title" required value="<%= _form.title ? _form.title : '' %>"></label>
 
             <label>Matière<br>

@@ -55,6 +55,7 @@
                     <% } %>
 
                         <form action="/events/<%= event.id %>/comments" method="POST" class="comment-form">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="form-group">
                                 <textarea name="content" placeholder="Ajouter un commentaire..." required
                                     rows="3"></textarea>
@@ -68,6 +69,7 @@
             <a class="button outline" href="/events/<%= event.id %>/ical">Exporter iCal</a>
             <form action="/events/<%= event.id %>?_method=DELETE" method="POST"
                 onsubmit="return confirm('Supprimer cet événement ?');" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button class="button danger" type="submit">Supprimer</button>
             </form>
             <a class="button muted" href="/">Retour</a>
