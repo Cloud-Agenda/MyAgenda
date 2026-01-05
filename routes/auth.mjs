@@ -62,6 +62,9 @@ router.post("/register", async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.error(error);
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.render("register", { error: "Cet email ou ce nom d'utilisateur est déjà pris.", form: req.body });
+    }
     res.render("register", { error: "Erreur lors de l'inscription", form: req.body });
   }
 });

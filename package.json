@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.mjs",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node app.mjs",
     "reminders": "node scripts/create_reminders.mjs"
   },
@@ -24,5 +24,9 @@
     "method-override": "^3.0.0",
     "mysql2": "^3.15.3",
     "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
   }
 }
