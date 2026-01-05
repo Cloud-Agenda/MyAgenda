@@ -332,7 +332,8 @@ export const exportIcal = async (req, res) => {
             "END:VCALENDAR",
         ].join("\r\n");
 
-        res.setHeader("Content-Disposition", `attachment; filename=event-${event.id}.ics`);
+        const safeTitle = event.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        res.setHeader("Content-Disposition", `attachment; filename=${safeTitle}.ics`);
         res.setHeader("Content-Type", "text/calendar");
         res.send(ics);
     } catch (error) {

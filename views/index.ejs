@@ -6,7 +6,7 @@
       <p class="kicker">Créez des événements, consultez le calendrier et suivez facilement les devoirs. Interface claire
         pour être plus efficace.</p>
       <div class="hero-cta">
-        <a class="button primary" href="/events/new">Nouvel événement</a>
+        <a class="button primary" href="/events/new">Nouveau devoir</a>
         <a class="button outline" href="/agenda">Voir le calendrier</a>
       </div>
     </div>
@@ -89,7 +89,7 @@
                 </td>
                 <td class="actions">
                   <a href="/events/<%= ev.id %>/edit">Modifier</a>
-                  <a class="button outline" href="/events/<%= ev.id %>/ical">iCal</a>
+                  <a class="button outline" href="/events/<%= ev.id %>/ical">Outlook</a>
                   <form action="/events/<%= ev.id %>?_method=DELETE" method="POST"
                     onsubmit="return confirm('Supprimer cet événement ?');" style="display:inline">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
